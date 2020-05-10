@@ -43,8 +43,8 @@ az extension add --name spring-cloud
 1. Create a new folder and clone the sample app repository to your Azure Cloud account.  
 
 ```bash
-mkdir source-code
-git clone https://github.com/selvasingh/brewdis
+    mkdir source-code
+    git clone https://github.com/selvasingh/brewdis
 ```
 
 2. Change directory and build the project.
@@ -60,24 +60,24 @@ This will take a few minutes.
 1. Prepare your environment for deployments
 
 ```bash
-cp .scripts/setup-env-variables-azure-template.sh .scripts/setup-env-variables-azure.sh
+    cp .scripts/setup-env-variables-azure-template.sh .scripts/setup-env-variables-azure.sh
 ```
 
 Open `.scripts/setup-env-variables-azure.sh` and enter the following information:
 
 ```bash
-export SUBSCRIPTION=subscription-id # customize this
-export RESOURCE_GROUP=resource-group-name # customize this
-...
-export SPRING_CLOUD_SERVICE=azure-spring-cloud-name # customize this
-...
-export SPRING_REDIS_HOST=redis-server-host # customize this
-export SPRING_REDIS_PASSWORD=redis-password # customize this
+    export SUBSCRIPTION=subscription-id # customize this
+    export RESOURCE_GROUP=resource-group-name # customize this
+    ...
+    export SPRING_CLOUD_SERVICE=azure-spring-cloud-name # customize this
+    ...
+    export SPRING_REDIS_HOST=redis-server-host # customize this
+    export SPRING_REDIS_PASSWORD=redis-password # customize this
 ```
 
 Then, set the environment:
 ```bash
-source .scripts/setup-env-variables-azure.sh
+    source .scripts/setup-env-variables-azure.sh
 ```
 
 1. Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
@@ -121,12 +121,12 @@ source .scripts/setup-env-variables-azure.sh
 Create Spring Cloud microservice `retail` app.
 
 ```bash
-az spring-cloud app create --name ${APP_NAME} --instance-count 1 --is-public true \
-    --memory 2 \
-    --runtime-version Java_11 \
-    --jvm-options='-Xms2048m -Xmx2048m' \
-    --resource-group ${RESOURCE_GROUP} \
-    --service ${SPRING_CLOUD_SERVICE}
+    az spring-cloud app create --name ${APP_NAME} --instance-count 1 --is-public true \
+        --memory 2 \
+        --runtime-version Java_11 \
+        --jvm-options='-Xms2048m -Xmx2048m' \
+        --resource-group ${RESOURCE_GROUP} \
+        --service ${SPRING_CLOUD_SERVICE}
 ```
 
 ## Deploy application and set environment variables
@@ -134,15 +134,15 @@ az spring-cloud app create --name ${APP_NAME} --instance-count 1 --is-public tru
 We need to actually deploy our applications to Azure. Use the following commands to deploy all three applications:
 
 ```bash
-az spring-cloud app deploy --name ${APP_NAME} \
-    --jar-path ${BREWDIS_JAR} \
-    --resource-group ${RESOURCE_GROUP} \
-    --service ${SPRING_CLOUD_SERVICE} \
-    --env SPRING_REDIS_HOST=${SPRING_REDIS_HOST} \
-          SPRING_REDIS_PASSWORD=${SPRING_REDIS_PASSWORD} \
-          SPRING_REDIS_PORT=${SPRING_REDIS_PORT} \
-          STOMP_HOST=${STOMP_HOST} \
-          STOMP_PORT=${STOMP_PORT}
+    az spring-cloud app deploy --name ${APP_NAME} \
+        --jar-path ${BREWDIS_JAR} \
+        --resource-group ${RESOURCE_GROUP} \
+        --service ${SPRING_CLOUD_SERVICE} \
+        --env SPRING_REDIS_HOST=${SPRING_REDIS_HOST} \
+              SPRING_REDIS_PASSWORD=${SPRING_REDIS_PASSWORD} \
+              SPRING_REDIS_PORT=${SPRING_REDIS_PORT} \
+              STOMP_HOST=${STOMP_HOST} \
+              STOMP_PORT=${STOMP_PORT}
 ```
 
 ```azurecli
