@@ -7,14 +7,6 @@ products:
 description: "Deploy an existing Java Spring application using Azure Spring Cloud and Redis Enterprise"
 urlFragment: "brewdis"
 
-title: "Quickstart: Deploy a Java Spring application using Azure Spring Cloud and Redis Enterprise"
-description: In this quickstart, you deploy a existing application that use Redis Enterprise to Azure Spring Cloud.
-author: selvasingh
-ms.service: spring-cloud
-ms.topic: quickstart
-ms.date: 01/10/2020
-ms.author: asirveda
-
 ---
 # Quickstart: Deploy a Java Spring application using Azure Spring Cloud and Redis Enterprise 
 
@@ -23,21 +15,12 @@ Azure Spring Cloud enables you to easily run a Spring Boot based microservices a
 This quickstart shows you how to deploy an existing Java Spring Cloud application to Azure. When you're finished, you can continue to manage the application via the Azure CLI or switch to using the Azure portal.
 
 Following this quickstart, you will learn how to:
-
-> [!div class="checklist"]
-> * Provision a service instance
-> * Set a configuration server for an instance
-> * Build applications locally
-> * Deploy each microservice application
-> * Open your applications
+- Build an existing application locally
+- Provision an Azure Spring Cloud service instance
+- Deploy the application to Azure
+- Open the application
 
 ## Prerequisites
-
->[!Note]
-> Azure Spring Cloud is currently offered as a public preview. Public preview offerings allow customers to experiment with new features prior to their official release.  Public preview features and services are not meant for production use.  For more information about support during previews, please review our [FAQ](https://azure.microsoft.com/support/faq/) or file a [Support request](https://docs.microsoft.com/azure/azure-portal/supportability/how-to-create-azure-support-request) to learn more.
-
->[!TIP]
-> The Azure Cloud Shell is a free interactive shell that you can use to run the steps in this article.  It has common Azure tools preinstalled, including the latest versions of Git, JDK, Maven, Gradle, and the Azure CLI. If you are logged in to your Azure subscription, launch your [Azure Cloud Shell](https://shell.azure.com) from shell.azure.com.  You can learn more about Azure Cloud Shell by [reading our documentation](../cloud-shell/overview.md)
 
 To complete this quickstart:
 
@@ -59,17 +42,17 @@ az extension add --name spring-cloud
 
 1. Create a new folder and clone the sample app repository to your Azure Cloud account.  
 
-    ```console
-        mkdir source-code
-        git clone https://github.com/selvasingh/brewdis
-    ```
+```bash
+mkdir source-code
+git clone https://github.com/selvasingh/brewdis
+```
 
 2. Change directory and build the project.
 
-    ```console
-        cd brewdis
-        gradle build
-    ```
+```bash
+    cd brewdis
+    gradle build
+```
 This will take a few minutes.
 
 ## Provision a service instance on the Azure CLI
@@ -99,39 +82,39 @@ source .scripts/setup-env-variables-azure.sh
 
 1. Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
 
-    ```azurecli
-        az login
-        az account list -o table
-        az account set --subscription ${SUBSCRIPTION}
-    ```
+```bash
+    az login
+    az account list -o table
+    az account set --subscription ${SUBSCRIPTION}
+```
 
 2. Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
 
 3. Create a resource group to contain your Azure Spring Cloud service.
 
-    ```bash
-        az group create --name ${RESOURCE_GROUP} \
-            --location ${REGION}
-    ```
+```bash
+    az group create --name ${RESOURCE_GROUP} \
+        --location ${REGION}
+```
 
 4. Open an Azure CLI window and run the following commands to provision an instance of Azure Spring Cloud.
 
-    ```bash
-        az spring-cloud create --name ${SPRING_CLOUD_SERVICE} \
-            --resource-group ${RESOURCE_GROUP} \
-            --location ${REGION}
-    ```
+```bash
+    az spring-cloud create --name ${SPRING_CLOUD_SERVICE} \
+        --resource-group ${RESOURCE_GROUP} \
+        --location ${REGION}
+```
 
     The service instance will take around five minutes to deploy.
 
 5. Set your default resource group name and cluster name using the following commands:
 
-    ```bash
-        az configure --defaults \
-            group=${RESOURCE_GROUP} \
-            location=${REGION} \
-            spring-cloud=${SPRING_CLOUD_SERVICE}
-    ```
+```bash
+    az configure --defaults \
+        group=${RESOURCE_GROUP} \
+        location=${REGION} \
+        spring-cloud=${SPRING_CLOUD_SERVICE}
+```
 
 ## Create a microservice application
 
