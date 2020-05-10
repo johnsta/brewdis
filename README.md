@@ -108,7 +108,7 @@ Create a resource group to contain your Azure Spring Cloud service.
         --location ${REGION}
 ```
 
-Open an Azure CLI window and run the following commands to provision an instance of Azure Spring Cloud.
+Create an instance of Azure Spring Cloud.
 
 ```bash
     az spring-cloud create --name ${SPRING_CLOUD_SERVICE} \
@@ -135,20 +135,16 @@ Create Spring Cloud microservice `retail` app.
     az spring-cloud app create --name ${APP_NAME} --instance-count 1 --is-public true \
         --memory 2 \
         --runtime-version Java_11 \
-        --jvm-options='-Xms2048m -Xmx2048m' \
-        --resource-group ${RESOURCE_GROUP} \
-        --service ${SPRING_CLOUD_SERVICE}
+        --jvm-options='-Xms2048m -Xmx2048m'
 ```
 
 ## Deploy application and set environment variables
 
-We need to actually deploy our applications to Azure. Use the following commands to deploy all three applications:
+Deploy the application to Azure.
 
 ```bash
     az spring-cloud app deploy --name ${APP_NAME} \
         --jar-path ${BREWDIS_JAR} \
-        --resource-group ${RESOURCE_GROUP} \
-        --service ${SPRING_CLOUD_SERVICE} \
         --env SPRING_REDIS_HOST=${SPRING_REDIS_HOST} \
               SPRING_REDIS_PASSWORD=${SPRING_REDIS_PASSWORD} \
               SPRING_REDIS_PORT=${SPRING_REDIS_PORT} \
@@ -160,7 +156,7 @@ We need to actually deploy our applications to Azure. Use the following commands
     az spring-cloud app show --name ${APP_NAME} | grep url
 ```
 
-Navigate to the URL provided by the previous command to run the brewdis application.
+Navigate to the URL provided by the previous command to open the brewdis application.
     
 ![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
 
