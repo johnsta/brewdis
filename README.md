@@ -14,21 +14,29 @@ Azure Spring Cloud enables you to easily run a Spring Boot based microservices a
 
 This quickstart shows you how to deploy an existing Java Spring Cloud application to Azure. When you're finished, you can continue to manage the application via the Azure CLI or switch to using the Azure portal.
 
-Following this quickstart, you will learn how to:
+## What will you experience
+You will:
 - Build an existing application locally
 - Provision an Azure Spring Cloud service instance
 - Deploy the application to Azure
 - Open the application
 
-## Prerequisites
+## What you will need
 
-To complete this quickstart:
+In order to deploy a Java app to cloud, you need 
+an Azure subscription. If you do not already have an Azure 
+subscription, you can activate your 
+[MSDN subscriber benefits](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/) 
+or sign up for a 
+[free Azure account]((https://azure.microsoft.com/free/)).
 
-1. [Install Git](https://git-scm.com/)
-2. [Install JDK 11](https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable)
-3. [Install Maven 3.0 or above](https://maven.apache.org/download.cgi)
-4. [Install the Azure CLI version 2.0.67 or higher](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)
-5. [Sign up for an Azure subscription](https://azure.microsoft.com/free/)
+In addition, you will need the following:
+
+| [Azure CLI version 2.0.67 or higher](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 
+| [Java 11](https://www.azul.com/downloads/azure-only/zulu/?version=java-11-lts&architecture=x86-64-bit&package=jdk) 
+| [Maven 3](https://maven.apache.org/download.cgi) 
+| [Git](https://git-scm.com/)
+|
 
 ## Install the Azure CLI extension
 
