@@ -55,7 +55,7 @@ Install the Azure Spring Cloud extension for the Azure CLI using the following c
 ```
 This will take a few minutes.
 
-## Provision a service instance on the Azure CLI
+## Provision Azure Spring Cloud service instance using Azure CLI
 
 ### Prepare your environment for deployments
 
@@ -80,7 +80,8 @@ Then, set the environment:
     source .scripts/setup-env-variables-azure.sh
 ```
 
-### Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
+### Login to the Azure CLI 
+Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
 
 ```bash
     az login
@@ -88,7 +89,8 @@ Then, set the environment:
     az account set --subscription ${SUBSCRIPTION}
 ```
 
-### Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
+### Create Azure Spring Cloud servic instance
+Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
 
 Create a resource group to contain your Azure Spring Cloud service.
 
