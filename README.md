@@ -34,20 +34,20 @@ To complete this quickstart:
 
 Install the Azure Spring Cloud extension for the Azure CLI using the following command
 
-```azurecli
-az extension add --name spring-cloud
+```bash
+    az extension add --name spring-cloud
 ```
 
 ## Clone and build the repo
 
-1. Create a new folder and clone the sample app repository to your Azure Cloud account.  
+### Create a new folder and clone the sample app repository to your Azure Cloud account  
 
 ```bash
     mkdir source-code
     git clone https://github.com/selvasingh/brewdis
 ```
 
-2. Change directory and build the project.
+### Change directory and build the project
 
 ```bash
     cd brewdis
@@ -57,7 +57,7 @@ This will take a few minutes.
 
 ## Provision a service instance on the Azure CLI
 
-1. Prepare your environment for deployments
+### Prepare your environment for deployments
 
 ```bash
     cp .scripts/setup-env-variables-azure-template.sh .scripts/setup-env-variables-azure.sh
@@ -80,7 +80,7 @@ Then, set the environment:
     source .scripts/setup-env-variables-azure.sh
 ```
 
-1. Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
+### Login to the Azure CLI and choose your active subscription. Be sure to choose the active subscription that is whitelisted for Azure Spring Cloud
 
 ```bash
     az login
@@ -88,16 +88,16 @@ Then, set the environment:
     az account set --subscription ${SUBSCRIPTION}
 ```
 
-2. Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
+### Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
 
-3. Create a resource group to contain your Azure Spring Cloud service.
+Create a resource group to contain your Azure Spring Cloud service.
 
 ```bash
     az group create --name ${RESOURCE_GROUP} \
         --location ${REGION}
 ```
 
-4. Open an Azure CLI window and run the following commands to provision an instance of Azure Spring Cloud.
+Open an Azure CLI window and run the following commands to provision an instance of Azure Spring Cloud.
 
 ```bash
     az spring-cloud create --name ${SPRING_CLOUD_SERVICE} \
@@ -107,7 +107,7 @@ Then, set the environment:
 
     The service instance will take around five minutes to deploy.
 
-5. Set your default resource group name and cluster name using the following commands:
+Set your default resource group name and cluster name using the following commands:
 
 ```bash
     az configure --defaults \
