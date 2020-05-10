@@ -148,16 +148,15 @@ We need to actually deploy our applications to Azure. Use the following commands
               STOMP_PORT=${STOMP_PORT}
 ```
 
-```azurecli
-az spring-cloud app show --name ${APP_NAME} | grep url
+```bash
+    az spring-cloud app show --name ${APP_NAME} | grep url
 ```
 
-3. Navigate to the URL provided by the previous command to run the brewdis application.
+Navigate to the URL provided by the previous command to run the brewdis application.
     
-    ![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
+![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
 
 ## Next Steps
 
-In this quickstart, you've deployed a Spring Cloud application from the Azure CLI.  To learn more about Azure Spring Cloud, continue to the tutorial on preparing your app for deployment.
-
-More samples are available on GitHub: [Azure Spring Cloud Samples](https://github.com/Azure-Samples/Azure-Spring-Cloud).
+In this quickstart, you've deployed an existing Spring Boot application using Azure CLI.  To learn more about Azure Spring Cloud, 
+check out more samples on GitHub: [Azure Spring Cloud Sample](https://github.com/Azure-Samples/Azure-Spring-Cloud).
