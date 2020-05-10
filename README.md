@@ -158,7 +158,8 @@ Deploy the application to Azure.
 
 Navigate to the URL provided by the previous command to open the brewdis application.
     
-![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
+![](./media/Brewdis-inventory.jpg)
+![](./media/Brewdis-catalog.jpg)
 
 ## Next Steps
 
