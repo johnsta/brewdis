@@ -8,7 +8,7 @@ description: "Deploy an existing Java Spring application using Azure Spring Clou
 urlFragment: "brewdis"
 
 ---
-# Quickstart: Deploy Java Spring Boot application using Azure Spring Cloud and Redis Enterprise 
+# Deploy existing Java Spring Boot app using Azure Spring Cloud and Redis Enterprise 
 
 Azure Spring Cloud enables you to easily run a Spring Boot based microservices application on Azure.
 
@@ -155,19 +155,6 @@ az spring-cloud app show --name ${APP_NAME} | grep url
 3. Navigate to the URL provided by the previous command to run the brewdis application.
     
     ![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
-
-You can also navigate the Azure portal to find the URL. 
-1. Navigate to the service
-2. Select **Apps**
-3. Select **gateway**
-
-    ![Screenshot of PiggyMetrics running](media/spring-cloud-quickstart-launch-app-cli/navigate-app1.png)
-    
-4. Find the URL on the **gateway Overview** page
-    ![Screenshot of PiggyMetrics running](media/spring-cloud-quickstart-launch-app-cli/navigate-app2-url.png)
-
-> [!div class="nextstepaction"]
-> [I ran into an issue](https://www.research.net/r/javae2e?tutorial=asc-cli-quickstart&step=public-endpoint)
 
 ## Next Steps
 
