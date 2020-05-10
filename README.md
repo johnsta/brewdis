@@ -166,8 +166,7 @@ Navigate to the URL provided by the previous command to run the brewdis applicat
 
 ## Next Steps
 
-In this quickstart, you've deployed an existing Spring Boot application using Azure CLI.  
-To learn more about Azure Spring Cloud, go to:
+In this quickstart, you've deployed an existing Spring Boot application using Azure CLI. To learn more about Azure Spring Cloud, go to:
 
 - [Azure Spring Cloud](https://azure.microsoft.com/en-us/services/spring-cloud/)
 - [Azure Spring Cloud docs](https://docs.microsoft.com/en-us/azure/java/)
