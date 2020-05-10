@@ -8,7 +8,7 @@ description: "Deploy an existing Java Spring application using Azure Spring Clou
 urlFragment: "brewdis"
 
 ---
-# Quickstart: Deploy a Java Spring application using Azure Spring Cloud and Redis Enterprise 
+# Quickstart: Deploy Java Spring Boot application using Azure Spring Cloud and Redis Enterprise 
 
 Azure Spring Cloud enables you to easily run a Spring Boot based microservices application on Azure.
 
@@ -59,6 +59,7 @@ This will take a few minutes.
 
 ### Prepare your environment for deployments
 
+Create a bash script with environment variables by making a copy of the supplied template:
 ```bash
     cp .scripts/setup-env-variables-azure-template.sh .scripts/setup-env-variables-azure.sh
 ```
@@ -89,7 +90,7 @@ Login to the Azure CLI and choose your active subscription. Be sure to choose th
     az account set --subscription ${SUBSCRIPTION}
 ```
 
-### Create Azure Spring Cloud servic instance
+### Create Azure Spring Cloud service instance
 Prepare a name for your Azure Spring Cloud service.  The name must be between 4 and 32 characters long and can contain only lowercase letters, numbers, and hyphens.  The first character of the service name must be a letter and the last character must be either a letter or a number.
 
 Create a resource group to contain your Azure Spring Cloud service.
@@ -107,7 +108,7 @@ Open an Azure CLI window and run the following commands to provision an instance
         --location ${REGION}
 ```
 
-    The service instance will take around five minutes to deploy.
+The service instance will take around five minutes to deploy.
 
 Set your default resource group name and cluster name using the following commands:
 
@@ -152,7 +153,8 @@ az spring-cloud app show --name ${APP_NAME} | grep url
 ```
 
 3. Navigate to the URL provided by the previous command to run the brewdis application.
-    ![Screenshot of PiggyMetrics running](media/spring-cloud-quickstart-launch-app-cli/launch-app.png)
+    
+    ![](./media/Brewdis-2020-05-10%2007-05-53.jpg)
 
 You can also navigate the Azure portal to find the URL. 
 1. Navigate to the service
