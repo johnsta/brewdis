@@ -4,11 +4,11 @@ languages:
 - java
 products:
 - Azure Spring Cloud
-description: "Deploy an existing Java Spring application using Azure Spring Cloud and Redis Enterprise"
+description: "Deploy Spring Boot app using Azure Spring Cloud and Redis Enterprise"
 urlFragment: "brewdis"
 
 ---
-# Deploy existing Java Spring Boot app using Azure Spring Cloud and Redis Enterprise 
+# Deploy Spring Boot app using Azure Spring Cloud and Redis Enterprise 
 
 Azure Spring Cloud enables you to easily run a Spring Boot based microservices application on Azure.
 
@@ -34,7 +34,7 @@ In addition, you will need the following:
 
 | [Azure CLI version 2.0.67 or higher](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 
 | [Java 11](https://www.azul.com/downloads/azure-only/zulu/?version=java-11-lts&architecture=x86-64-bit&package=jdk) 
-| [Maven 3](https://maven.apache.org/download.cgi) 
+| [Gradle](https://gradle.org/install/) 
 | [Git](https://git-scm.com/)
 |
 
@@ -59,7 +59,7 @@ Install the Azure Spring Cloud extension for the Azure CLI using the following c
 
 ```bash
     cd brewdis
-    gradle build
+    ./gradlew build
 ```
 This will take a few minutes.
 
