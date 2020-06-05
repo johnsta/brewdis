@@ -1,0 +1,19 @@
+name: "e2e"
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - uses: microsoft/playwright-github-action@v1
+      - name: Install dependencies
+        run: cd brewdis-ui && npm install
+      - name: Run Playwright tests
+        run: npm run e2e
