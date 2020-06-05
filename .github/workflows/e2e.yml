@@ -1,9 +1,5 @@
 name: "e2e"
-on:
-  pull_request:
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   e2e-tests:
@@ -15,5 +11,7 @@ jobs:
       - uses: microsoft/playwright-github-action@v1
       - name: Install dependencies
         run: cd brewdis-ui && npm install
+      - name: Build Angular app
+        run: cd brewdis-ui && npm run build
       - name: Run Playwright tests
-        run: npm run e2e
+        run: cd brewdis-ui && npm run e2e
