@@ -38,6 +38,11 @@ In addition, you will need the following:
 | [Git](https://git-scm.com/)
 |
 
+Create an instance of Azure Cache for Redis Enterprise:
+| [Step-by-step directions](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/quickstart-create-redis-enterprise)
+| [Start here https://aka.ms/redis-enterprise which includes preview feature flag](https://aka.ms/redis-enterprise)
+|
+
 ## Install the Azure CLI extension
 
 Install the Azure Spring Cloud extension for the Azure CLI using the following command
@@ -160,6 +165,15 @@ Navigate to the URL provided by the previous command to open the brewdis applica
     
 ![](./media/Brewdis-inventory.jpg)
 ![](./media/Brewdis-catalog.jpg)
+
+## Open logstream
+
+You can open the log stream from your development machine.
+
+```bash
+    az spring-cloud app logs -f -n ${APP_NAME}
+```
+![](./media/az-spring-cloud-logs.jpg)
 
 ## Next Steps
 
