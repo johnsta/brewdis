@@ -42,6 +42,7 @@ export class CatalogComponent implements OnInit {
   pageIndex = 0;
   pageSize = 50;
   showAvailabilityCount = false;
+  availableToPromise = 0;
 
   constructor(private searchService: SearchService, private route: ActivatedRoute, private router: Router, public dialog: MatDialog) { }
 
@@ -116,7 +117,9 @@ export class CatalogComponent implements OnInit {
     this.result$.subscribe(r => {
     	this.resultCount = r.count; 
     	this.searchDuration = r.duration; 
-    	this.showAvailabilityCount = r.showAvailabilityCount;});
+    	this.showAvailabilityCount = r.showAvailabilityCount;
+    	this.availableToPromise = r.availableToPromise;
+    });
     this.showResults = true;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
