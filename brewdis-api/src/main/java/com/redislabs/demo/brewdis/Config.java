@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
@@ -131,6 +132,11 @@ public @Data class Config {
 
 	public String tag(String field, String value) {
 		return "@" + field + ":{" + value + "}";
+	}
+	
+	@Bean
+	public BrowserFilter browserFilter() {
+	    return new BrowserFilter();
 	}
 
 }

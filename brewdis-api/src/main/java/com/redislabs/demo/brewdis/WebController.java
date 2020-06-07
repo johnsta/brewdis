@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.azure.spring.cloud.feature.manager.FeatureManager;
 import com.redislabs.demo.brewdis.Config.StompConfig;
 import com.redislabs.lettusearch.StatefulRediSearchConnection;
 import com.redislabs.lettusearch.search.Direction;
@@ -59,6 +60,8 @@ class WebController {
 	private InventoryGenerator generator;
 	@Autowired
 	private DataLoader data;
+	@Autowired
+	private FeatureManager featureManager;
 	private ObjectMapper mapper = new ObjectMapper();
 
 	@GetMapping("/config/stomp")
@@ -85,6 +88,7 @@ class WebController {
 		private float duration;
 		private long pageIndex;
 		private long pageSize;
+		private boolean showAvailabilityCount;
 	}
 
 	@PostMapping("/products")
@@ -116,6 +120,7 @@ class WebController {
 		results.setPageIndex(query.getPageIndex());
 		results.setPageSize(query.getPageSize());
 		results.setDuration(((float) (endTime - startTime)) / 1000);
+		results.setShowAvailabilityCount(featureManager.isEnabledAsync("beta").block());
 		return results;
 	}
 

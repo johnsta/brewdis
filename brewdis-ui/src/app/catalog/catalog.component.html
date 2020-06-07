@@ -130,6 +130,9 @@
 					<button mat-button (click)="openDescriptionDialog(product)" color="basic">Details</button>
 					<button mat-button [routerLink]="['/availability', product.sku]"
 						color="primary">Availability</button>
+                    <span *ngIf="showAvailabilityCount">
+                        Test
+                    </span>
 				</mat-card-actions>
 			</mat-card>
 		</div>
