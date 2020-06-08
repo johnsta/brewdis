@@ -75,7 +75,7 @@ class WebController {
 		private String sortByDirection = "Ascending";
 		private long pageIndex = 0;
 		private long pageSize = 100;
-		
+
 		public long getOffset() {
 			return pageIndex * pageSize;
 		}
