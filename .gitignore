@@ -11,3 +11,4 @@
 .scripts/
 *.iml
 .idea/
+brewdis-ui/__tests__/artifacts/**
