@@ -166,6 +166,41 @@ Navigate to the URL provided by the previous command to open the brewdis applica
 ![](./media/Brewdis-inventory.jpg)
 ![](./media/Brewdis-catalog.jpg)
 
+## Market Targeting
+
+When viewing the application you will find that if you are a user of the Edge browser, then you will see the availability count shown on the catalog page. We are testing out this new feature, and to start with we are just targeting users of the Edge browser.
+
+```java
+boolean showAvailabilityCount = featureManager.isEnabledAsync("beta").block();
+```
+
+This is done by using a Feature Flag and a Feature Filter to check which browser is being used. This is a custom Feature Filter that was designed to target 1 of 3 browsers, Edge, Firefox, and Chrome, depending on the configuration.
+
+```java
+public class BrowserFilter implements FeatureFilter {
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Override
+    public boolean evaluate(FeatureFilterEvaluationContext context) {
+        String userAgent = request.getHeader(USERAGENT);
+        String browser = (String) context.getParameters().get(BROWSER);
+        if (userAgent.contains(EDGE_USERAGENT) && browser.equals(EDGE_BROWSER)) {
+            return true;
+        } else if (userAgent.contains(FIREFOX_USERAGENT) && browser.equals(FIREFOX_BROWSER)) {
+            return true;
+        } else if (userAgent.contains(CHROME_USERAGENT) && !userAgent.contains(EDGE_USERAGENT)
+                && browser.equals(CHROME_BROWSER)) {
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+Additional information on how to use Feature Flags can be found [here](https://docs.microsoft.com/azure/azure-app-configuration/use-feature-flags-spring-boot).
+
 ## Open logstream
 
 You can open the log stream from your development machine.
