@@ -17,6 +17,12 @@ resource "azurerm_spring_cloud_service" "demo01" {
   name                = var.svcName
   resource_group_name = azurerm_resource_group.demo01.name
   location            = "westeurope"
+
+  config_server_git_setting {
+    uri          = "https://github.com/selvasingh/spring-petclinic-microservices-config"
+    label        = "master"
+    search_paths= ["."]
+  }
 }
 
 resource "azurerm_spring_cloud_app" "brew" {
