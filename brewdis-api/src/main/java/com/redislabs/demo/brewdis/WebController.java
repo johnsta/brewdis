@@ -54,19 +54,14 @@ class WebController {
 
 	@Autowired
 	private Config config;
-
 	@Autowired
 	private StatefulRediSearchConnection<String, String> connection;
-
 	@Autowired
 	private InventoryGenerator generator;
-
 	@Autowired
 	private DataLoader data;
-
 	@Autowired
 	private FeatureManager featureManager;
-
 	private ObjectMapper mapper = new ObjectMapper();
 
 	@GetMapping("/config/stomp")
@@ -76,15 +71,11 @@ class WebController {
 
 	public static @Data class Query {
 		private String query = "*";
-
 		private String sortByField;
-
 		private String sortByDirection = "Ascending";
-
 		private long pageIndex = 0;
-
 		private long pageSize = 100;
-
+		
 		public long getOffset() {
 			return pageIndex * pageSize;
 		}
@@ -93,15 +84,10 @@ class WebController {
 
 	public static @Data class ResultsPage {
 		private long count;
-
 		private SearchResults<String, String> results;
-
 		private float duration;
-
 		private long pageIndex;
-
 		private long pageSize;
-
 		private boolean showAvailabilityCount;
 	}
 
@@ -162,7 +148,6 @@ class WebController {
 	public static @Data class Style {
 
 		private String id;
-
 		private String name;
 
 	}
@@ -176,7 +161,6 @@ class WebController {
 	public static @Data class Category {
 
 		private String id;
-
 		private String name;
 
 	}
@@ -227,15 +211,12 @@ class WebController {
 
 	public static @Data class BrewerySuggestion {
 		private String id;
-
 		private String name;
-
 		private String icon;
 	}
 
 	public static @Data class BrewerySuggestionPayload {
 		private String id;
-
 		private String icon;
 	}
 
