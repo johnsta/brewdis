@@ -52,199 +52,221 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class WebController {
 
-	@Autowired
-	private Config config;
-	@Autowired
-	private StatefulRediSearchConnection<String, String> connection;
-	@Autowired
-	private InventoryGenerator generator;
-	@Autowired
-	private DataLoader data;
-	@Autowired
+    @Autowired
+    private Config config;
+
+    @Autowired
+    private StatefulRediSearchConnection<String, String> connection;
+
+    @Autowired
+    private InventoryGenerator generator;
+
+    @Autowired
+    private DataLoader data;
+
+    @Autowired
     private FeatureManager featureManager;
-	private ObjectMapper mapper = new ObjectMapper();
 
-	@GetMapping("/config/stomp")
-	public StompConfig stompConfig() {
-		return config.getStomp();
-	}
+    private ObjectMapper mapper = new ObjectMapper();
 
-	public static @Data class Query {
-		private String query = "*";
-		private String sortByField;
-		private String sortByDirection = "Ascending";
-		private long pageIndex = 0;
-		private long pageSize = 100;
+    @GetMapping("/config/stomp")
+    public StompConfig stompConfig() {
+        return config.getStomp();
+    }
 
-		public long getOffset() {
-			return pageIndex * pageSize;
-		}
+    public static @Data class Query {
+        private String query = "*";
 
-	}
+        private String sortByField;
 
-	public static @Data class ResultsPage {
-		private long count;
-		private SearchResults<String, String> results;
-		private float duration;
-		private long pageIndex;
-		private long pageSize;
-		private boolean showAvailabilityCount;
-	}
+        private String sortByDirection = "Ascending";
 
-	@PostMapping("/products")
-	public ResultsPage products(@RequestBody Query query,
-			@RequestParam(name = "longitude", required = true) Double longitude,
-			@RequestParam(name = "latitude", required = true) Double latitude, HttpSession session) {
-		log.info("Searching for products around lon={} lat={}", longitude, latitude);
-		SearchOptionsBuilder options = SearchOptions.builder()
-				.highlight(HighlightOptions.builder().field(PRODUCT_NAME).field(PRODUCT_DESCRIPTION)
-						.field(CATEGORY_NAME).field(STYLE_NAME).field(BREWERY_NAME)
-						.tags(TagOptions.builder().open("<mark>").close("</mark>").build()).build())
-				.limit(Limit.builder().offset(query.getOffset()).num(query.getPageSize()).build());
-		if (query.getSortByField() != null) {
-			options.sortBy(SortBy.builder().field(query.getSortByField())
-					.direction(Direction.valueOf(query.getSortByDirection())).build());
-		}
-		String queryString = query.getQuery() == null || query.getQuery().length() == 0 ? "*" : query.getQuery();
-		long startTime = System.currentTimeMillis();
-		SearchResults<String, String> searchResults = connection.sync().search(config.getProduct().getIndex(),
-				queryString, options.build());
-		long endTime = System.currentTimeMillis();
-		List<String> skus = searchResults.stream().map(r -> r.get(PRODUCT_ID)).collect(Collectors.toList());
-		List<String> stores = connection.sync().search(config.getStore().getIndex(), geoCriteria(longitude, latitude))
-				.stream().map(r -> r.get(STORE_ID)).collect(Collectors.toList());
-		generator.add(session.getId(), stores, skus);
-		ResultsPage results = new ResultsPage();
-		results.setCount(searchResults.count());
-		results.setResults(searchResults);
-		results.setPageIndex(query.getPageIndex());
-		results.setPageSize(query.getPageSize());
-		results.setDuration(((float) (endTime - startTime)) / 1000);
-		results.setShowAvailabilityCount(featureManager.isEnabledAsync("beta").block());
-		
-		for (SearchResult<String, String> result: results.getResults()) {
-			SearchResults<String, String> counts = availability(result.get("sku"), longitude, latitude);
-			int onHand = 0;
-			int allocated = 0;
-			int reserved = 0;
-			int virtualHold = 0;
-			for (SearchResult<String, String> count : counts) {
-				onHand += Integer.valueOf(count.get("onHand"));
-				allocated += Integer.valueOf(count.get("allocated"));
-				reserved += Integer.valueOf(count.get("reserved"));
-				virtualHold += Integer.valueOf(count.get("virtualHold"));
-			}
-			int atp = onHand - allocated - reserved - virtualHold;
-			result.put(AVAILABLE_TO_PROMISE, String.valueOf(atp));
-		}
-		
-		return results;
-	}
+        private long pageIndex = 0;
 
-	@Builder
-	public static @Data class Style {
+        private long pageSize = 100;
 
-		private String id;
-		private String name;
+        public long getOffset() {
+            return pageIndex * pageSize;
+        }
 
-	}
+    }
 
-	@GetMapping("/styles")
-	public List<Style> styles(@RequestParam(name = "category", defaultValue = "", required = false) String category) {
-		return data.getStyles().get(category);
-	}
+    public static @Data class ResultsPage {
+        private long count;
 
-	@Builder
-	public static @Data class Category {
+        private SearchResults<String, String> results;
 
-		private String id;
-		private String name;
+        private float duration;
 
-	}
+        private long pageIndex;
 
-	@GetMapping("/categories")
-	public List<Category> categories() {
-		return data.getCategories();
-	}
+        private long pageSize;
 
-	@GetMapping("/inventory")
-	public SearchResults<String, String> inventory(@RequestParam(name = "store", required = false) String store) {
-		String query = "@" + AVAILABLE_TO_PROMISE + ":[0 inf]";
-		if (store != null) {
-			query += " " + config.tag(STORE_ID, store);
-		}
-		return connection.sync().search(config.getInventory().getIndex(), query,
-				SearchOptions.builder().sortBy(SortBy.builder().field(STORE_ID).field(PRODUCT_ID).build())
-						.limit(Limit.builder().num(config.getInventory().getSearchLimit()).build()).build());
-	}
+        private boolean showAvailabilityCount;
+    }
 
-	@GetMapping("/availability")
-	public SearchResults<String, String> availability(@RequestParam(name = "sku", required = false) String sku,
-			@RequestParam(name = "longitude", required = true) Double longitude,
-			@RequestParam(name = "latitude", required = true) Double latitude) {
-		String query = geoCriteria(longitude, latitude);
-		if (sku != null) {
-			query += " " + config.tag(PRODUCT_ID, sku);
-		}
-		log.info("Searching for availability: {}", query);
-		SearchResults<String, String> results = connection.sync().search(config.getInventory().getIndex(), query,
-				SearchOptions.builder().limit(Limit.builder().num(config.getInventory().getSearchLimit()).build())
-						.build());
-		results.forEach(r -> r.put(LEVEL, config.getInventory().level(availableToPromise(r))));
-		return results;
+    @PostMapping("/products")
+    public ResultsPage products(@RequestBody Query query,
+            @RequestParam(name = "longitude", required = true) Double longitude,
+            @RequestParam(name = "latitude", required = true) Double latitude, HttpSession session) {
+        log.info("Searching for products around lon={} lat={}", longitude, latitude);
+        SearchOptionsBuilder options = SearchOptions.builder()
+                .highlight(HighlightOptions.builder().field(PRODUCT_NAME).field(PRODUCT_DESCRIPTION)
+                        .field(CATEGORY_NAME).field(STYLE_NAME).field(BREWERY_NAME)
+                        .tags(TagOptions.builder().open("<mark>").close("</mark>").build()).build())
+                .limit(Limit.builder().offset(query.getOffset()).num(query.getPageSize()).build());
+        if (query.getSortByField() != null) {
+            options.sortBy(SortBy.builder().field(query.getSortByField())
+                    .direction(Direction.valueOf(query.getSortByDirection())).build());
+        }
+        String queryString = query.getQuery() == null || query.getQuery().length() == 0 ? "*" : query.getQuery();
+        long startTime = System.currentTimeMillis();
+        SearchResults<String, String> searchResults = connection.sync().search(config.getProduct().getIndex(),
+                queryString, options.build());
+        long endTime = System.currentTimeMillis();
+        List<String> skus = searchResults.stream().map(r -> r.get(PRODUCT_ID)).collect(Collectors.toList());
+        List<String> stores = connection.sync().search(config.getStore().getIndex(), geoCriteria(longitude, latitude))
+                .stream().map(r -> r.get(STORE_ID)).collect(Collectors.toList());
+        generator.add(session.getId(), stores, skus);
+        ResultsPage results = new ResultsPage();
+        results.setCount(searchResults.count());
+        results.setResults(searchResults);
+        results.setPageIndex(query.getPageIndex());
+        results.setPageSize(query.getPageSize());
+        results.setDuration(((float) (endTime - startTime)) / 1000);
 
-	}
+        boolean showAvailabilityCount = featureManager.isEnabledAsync("beta").block();
+        results.setShowAvailabilityCount(showAvailabilityCount);
+        if (showAvailabilityCount) {
+            for (SearchResult<String, String> result : results.getResults()) {
+                SearchResults<String, String> counts = availability(result.get("sku"), longitude, latitude);
+                int onHand = 0;
+                int allocated = 0;
+                int reserved = 0;
+                int virtualHold = 0;
+                for (SearchResult<String, String> count : counts) {
+                    onHand += Integer.valueOf(count.get("onHand"));
+                    allocated += Integer.valueOf(count.get("allocated"));
+                    reserved += Integer.valueOf(count.get("reserved"));
+                    virtualHold += Integer.valueOf(count.get("virtualHold"));
+                }
+                int atp = onHand - allocated - reserved - virtualHold;
+                result.put(AVAILABLE_TO_PROMISE, String.valueOf(atp));
+            }
+        }
 
-	private int availableToPromise(SearchResult<String, String> result) {
-		if (result.containsKey(AVAILABLE_TO_PROMISE)) {
-			return Integer.parseInt(result.get(AVAILABLE_TO_PROMISE));
-		}
-		return 0;
-	}
+        return results;
+    }
 
-	private String geoCriteria(Double longitude, Double latitude) {
-		return "@" + LOCATION + ":[" + longitude + " " + latitude + " " + config.getAvailabilityRadius() + "]";
-	}
+    @Builder
+    public static @Data class Style {
 
-	public static @Data class BrewerySuggestion {
-		private String id;
-		private String name;
-		private String icon;
-	}
+        private String id;
 
-	public static @Data class BrewerySuggestionPayload {
-		private String id;
-		private String icon;
-	}
+        private String name;
 
-	@GetMapping("/breweries")
-	public Stream<BrewerySuggestion> suggestBreweries(
-			@RequestParam(name = "prefix", defaultValue = "", required = false) String prefix) {
-		List<SuggestResult<String>> results = connection.sync().sugget(config.getProduct().getBrewery().getIndex(),
-				prefix, SuggestGetOptions.builder().withPayloads(true).max(20l)
-						.fuzzy(config.getProduct().getBrewery().isFuzzy()).build());
-		return results.stream().map(s -> {
-			BrewerySuggestion suggestion = new BrewerySuggestion();
-			suggestion.setName(s.string());
-			BrewerySuggestionPayload payload;
-			try {
-				payload = mapper.readValue(s.payload(), BrewerySuggestionPayload.class);
-				suggestion.setId(payload.getId());
-				suggestion.setIcon(payload.getIcon());
-			} catch (Exception e) {
-				log.error("Could not deserialize brewery payload {}", s.payload(), e);
-			}
-			return suggestion;
-		});
-	}
+    }
 
-	@GetMapping("/foods")
-	public Stream<String> suggestFoods(
-			@RequestParam(name = "prefix", defaultValue = "", required = false) String prefix) {
-		List<SuggestResult<String>> results = connection.sync().sugget(config.getProduct().getFoodPairings().getIndex(),
-				prefix, SuggestGetOptions.builder().withPayloads(true).max(20l)
-						.fuzzy(config.getProduct().getFoodPairings().isFuzzy()).build());
-		return results.stream().map(s -> s.string());
-	}
+    @GetMapping("/styles")
+    public List<Style> styles(@RequestParam(name = "category", defaultValue = "", required = false) String category) {
+        return data.getStyles().get(category);
+    }
+
+    @Builder
+    public static @Data class Category {
+
+        private String id;
+
+        private String name;
+
+    }
+
+    @GetMapping("/categories")
+    public List<Category> categories() {
+        return data.getCategories();
+    }
+
+    @GetMapping("/inventory")
+    public SearchResults<String, String> inventory(@RequestParam(name = "store", required = false) String store) {
+        String query = "@" + AVAILABLE_TO_PROMISE + ":[0 inf]";
+        if (store != null) {
+            query += " " + config.tag(STORE_ID, store);
+        }
+        return connection.sync().search(config.getInventory().getIndex(), query,
+                SearchOptions.builder().sortBy(SortBy.builder().field(STORE_ID).field(PRODUCT_ID).build())
+                        .limit(Limit.builder().num(config.getInventory().getSearchLimit()).build()).build());
+    }
+
+    @GetMapping("/availability")
+    public SearchResults<String, String> availability(@RequestParam(name = "sku", required = false) String sku,
+            @RequestParam(name = "longitude", required = true) Double longitude,
+            @RequestParam(name = "latitude", required = true) Double latitude) {
+        String query = geoCriteria(longitude, latitude);
+        if (sku != null) {
+            query += " " + config.tag(PRODUCT_ID, sku);
+        }
+        log.info("Searching for availability: {}", query);
+        SearchResults<String, String> results = connection.sync().search(config.getInventory().getIndex(), query,
+                SearchOptions.builder().limit(Limit.builder().num(config.getInventory().getSearchLimit()).build())
+                        .build());
+        results.forEach(r -> r.put(LEVEL, config.getInventory().level(availableToPromise(r))));
+        return results;
+
+    }
+
+    private int availableToPromise(SearchResult<String, String> result) {
+        if (result.containsKey(AVAILABLE_TO_PROMISE)) {
+            return Integer.parseInt(result.get(AVAILABLE_TO_PROMISE));
+        }
+        return 0;
+    }
+
+    private String geoCriteria(Double longitude, Double latitude) {
+        return "@" + LOCATION + ":[" + longitude + " " + latitude + " " + config.getAvailabilityRadius() + "]";
+    }
+
+    public static @Data class BrewerySuggestion {
+        private String id;
+
+        private String name;
+
+        private String icon;
+    }
+
+    public static @Data class BrewerySuggestionPayload {
+        private String id;
+
+        private String icon;
+    }
+
+    @GetMapping("/breweries")
+    public Stream<BrewerySuggestion> suggestBreweries(
+            @RequestParam(name = "prefix", defaultValue = "", required = false) String prefix) {
+        List<SuggestResult<String>> results = connection.sync().sugget(config.getProduct().getBrewery().getIndex(),
+                prefix, SuggestGetOptions.builder().withPayloads(true).max(20l)
+                        .fuzzy(config.getProduct().getBrewery().isFuzzy()).build());
+        return results.stream().map(s -> {
+            BrewerySuggestion suggestion = new BrewerySuggestion();
+            suggestion.setName(s.string());
+            BrewerySuggestionPayload payload;
+            try {
+                payload = mapper.readValue(s.payload(), BrewerySuggestionPayload.class);
+                suggestion.setId(payload.getId());
+                suggestion.setIcon(payload.getIcon());
+            } catch (Exception e) {
+                log.error("Could not deserialize brewery payload {}", s.payload(), e);
+            }
+            return suggestion;
+        });
+    }
+
+    @GetMapping("/foods")
+    public Stream<String> suggestFoods(
+            @RequestParam(name = "prefix", defaultValue = "", required = false) String prefix) {
+        List<SuggestResult<String>> results = connection.sync().sugget(config.getProduct().getFoodPairings().getIndex(),
+                prefix, SuggestGetOptions.builder().withPayloads(true).max(20l)
+                        .fuzzy(config.getProduct().getFoodPairings().isFuzzy()).build());
+        return results.stream().map(s -> s.string());
+    }
 
 }
