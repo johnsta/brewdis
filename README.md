@@ -198,6 +198,7 @@ public class BrowserFilter implements FeatureFilter {
     }
 }
 ```
+![](./media/brewdis-feature-flag-edge.jpg)
 
 Additional information on how to use Feature Flags can be found [here](https://docs.microsoft.com/azure/azure-app-configuration/use-feature-flags-spring-boot).
 
