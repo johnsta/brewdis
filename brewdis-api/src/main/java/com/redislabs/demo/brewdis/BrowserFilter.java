@@ -39,7 +39,6 @@ public class BrowserFilter implements FeatureFilter {
     public boolean evaluate(FeatureFilterEvaluationContext context) {
         String userAgent = request.getHeader(USERAGENT);
         String browser = (String) context.getParameters().get(BROWSER);
-        System.out.println(browser.contains(EDGE_USERAGENT));
         if (userAgent.contains(EDGE_USERAGENT) && browser.equals(EDGE_BROWSER)) {
             return true;
         } else if (userAgent.contains(FIREFOX_USERAGENT) && browser.equals(FIREFOX_BROWSER)) {
