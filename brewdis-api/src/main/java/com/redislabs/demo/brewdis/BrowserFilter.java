@@ -44,7 +44,8 @@ public class BrowserFilter implements FeatureFilter {
             return true;
         } else if (userAgent.contains(FIREFOX_USERAGENT) && browser.equals(FIREFOX_BROWSER)) {
             return true;
-        } else if (userAgent.contains(CHROME_USERAGENT) && browser.equals(CHROME_BROWSER)) {
+        } else if (userAgent.contains(CHROME_USERAGENT) && !userAgent.contains(EDGE_USERAGENT)
+                && browser.equals(CHROME_BROWSER)) {
             return true;
         }
         return false;
