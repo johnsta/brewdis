@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "demo01" {
-    name                      = var.rgName
-    location                  = "westeurope"
+    name              = var.rgName
+    location          = "westeurope"
 }
  
 resource "azurerm_redis_cache" "demo01" {
@@ -19,9 +19,9 @@ resource "azurerm_spring_cloud_service" "demo01" {
   location            = "westeurope"
 
   config_server_git_setting {
-    uri          = "https://github.com/selvasingh/spring-petclinic-microservices-config"
-    label        = "master"
-    search_paths= ["."]
+    uri               = "https://github.com/selvasingh/spring-petclinic-microservices-config"
+    label             = "master"
+    search_paths      = ["."]
   }
 }
 
