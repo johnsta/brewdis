@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - azure
-    #paths:
-    #  - '.github/*'
-    #  - 'brewdis-api/*'
 
 jobs:
   configure_app:
@@ -65,16 +62,9 @@ jobs:
             -g $RESOURCE_GROUP \
             --name $SPRING_CLOUD_APP \
             --jvm-options='-Xms2048m -Xmx2048m'\
-            --jar-path ${{ github.workspace }}/$BREWDIS_JAR
+            --jar-path ${{ github.workspace }}/$BREWDIS_JAR \
             --env SPRING_REDIS_HOST=${{ steps.keyvaultaction.outputs.SPRING-REDIS-HOST }} \
               SPRING_REDIS_PASSWORD=${{ steps.keyvaultaction.outputs.SPRING-REDIS-PASSWORD }} \
               SPRING_REDIS_PORT=$SPRING_REDIS_PORT \
               STOMP_HOST=${SPRING_CLOUD_SERVICE}-${SPRING_CLOUD_APP}.azuremicroservices.io \
               STOMP_PORT=$STOMP_PORT
-          
-    # Balan: Add steps here required to finish deployment of app
-    # - name: Connect_App
-    #   run: az ...
-
-    # - name: Deploy_App
-    #   run: az spring-cloud app deploy
