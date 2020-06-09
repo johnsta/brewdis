@@ -211,6 +211,54 @@ You can open the log stream from your development machine.
 ```
 ![](./media/az-spring-cloud-logs.jpg)
 
+## Automate Deployments using GitHub Actions
+
+### Prepare secrets in your Key Vault
+If you do not have a Key Vault yet, run the following commands to provision a Key Vault:
+```bash
+    export KEY_VAULT=your-keyvault-name # customize this
+    az keyvault create --name ${KEY_VAULT} -g ${RESOURCE_GROUP}
+```
+
+Create a service principal with enough scope/role to manage your Azure Spring Cloud resource group:
+```bash
+    az ad sp create-for-rbac --role contributor --scopes /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCEGROUP_ID> --sdk-auth
+```
+With results:
+```json
+    {
+        "clientId": "<GUID>",
+        "clientSecret": "<GUID>",
+        "subscriptionId": "<GUID>",
+        "tenantId": "<GUID>",
+        "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+        "resourceManagerEndpointUrl": "https://management.azure.com/",
+        "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+        "galleryEndpointUrl": "https://gallery.azure.com/",
+        "managementEndpointUrl": "https://management.core.windows.net/"
+    }
+```
+Add this service principle as a secret named `AZURE-CREDENTIALS-BREWREDIS-PROD` to your Key Vault, along with `SPRING-REDIS-HOST` and `SPRING-REDIS-PASSWORD`.
+
+### Grant Access to Key Vault with Service Principal
+To generate a key to access the Key Vault, execute command below:
+```bash
+    az ad sp create-for-rbac --role contributor --scopes /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.KeyVault/vaults/<KEY_VAULT> --sdk-auth
+```
+Then, follow [the steps here](https://docs.microsoft.com/azure/spring-cloud/spring-cloud-github-actions-key-vault#add-access-policies-for-the-credential) to add access policy for the Service Principal.
+
+In the end, add this service principal as secrets named "AZURE_KEY_VAULT" in your forked GitHub repo following [the steps here](https://docs.microsoft.com/en-us/azure/spring-cloud/spring-cloud-github-actions-key-vault#add-access-policies-for-the-credential).
+
+### Customize your workflow
+Finally, edit the workfolw file `.github/workflows/app.yml` in your forked repo to fill in the names of resource group and the Azure Spring Cloud instance name that you just created:
+```yml
+    env:
+      RESOURCE_GROUP: brewdis-prod # customize this
+      SPRING_CLOUD_SERVICE: brewdis-spring-cloud # customize this
+      SPRING_CLOUD_APP: brewdis-storefront # customize this
+```
+After you commited this change, you will see GitHub Actions triggered to build and deploy the `brewdis-api` app to your Azure Spring Cloud instance.
+
 ## Next Steps
 
 In this quickstart, you've deployed an existing Spring Boot application using Azure CLI. To learn more about Azure Spring Cloud, go to:
