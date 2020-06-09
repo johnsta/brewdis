@@ -3,7 +3,7 @@ name: 'Deploy Brewdis App'
 on:
   push:
     branches:
-      - Azure
+      - azure
     #paths:
     #  - '.github/*'
     #  - 'brewdis-api/*'
