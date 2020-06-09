@@ -61,8 +61,8 @@ jobs:
     - name: Deploy with AZ CLI commands
       run: |
           az spring-cloud app deploy \
-            -s $SPRING_CLOUD_SERVICE
-            -g $RESOURCE_GROUP
+            -s $SPRING_CLOUD_SERVICE \
+            -g $RESOURCE_GROUP \
             --name $SPRING_CLOUD_APP \
             --jvm-options='-Xms2048m -Xmx2048m'\
             --jar-path ${{ github.workspace }}/$BREWDIS_JAR
