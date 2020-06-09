@@ -1,0 +1,40 @@
+name: 'Deploy Brewdis App'
+
+on:
+  push:
+    branches:
+    - Azure
+  pull_request:
+
+jobs:
+  configure_app:
+    name: 'Brewdis App configurations'
+    runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZ_CL_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZ_CL_PWD }}
+      ARM_SUBSCRIPTION_ID: 874f6233-e9b0-4c57-a3bc-2365b7544f2a
+      ARM_TENANT_ID: ${{ secrets.AZ_TENANT_MS }}
+      
+    defaults:
+      run:
+        shell: bash
+
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Login
+      run: az login --service-principal --username ${ARM_CLIENT_ID} --password ${ARM_CLIENT_SECRET} --tenant ${ARM_TENANT_ID}
+
+    - name: Set_Subscription
+      run: az account set --subscription ${ARM_SUBSCRIPTION_ID}
+
+    # Balan: Add steps here required to finish deployment of app
+    # - name: Connect_App
+    #   run: az ...
+
+    # - name: Deploy_App
+    #   run: az spring-cloud app deploy
