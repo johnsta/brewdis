@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "demo01" {
     name                      = var.rgName
-    location                  = "eastus2"
+    location                  = "westeurope"
 }
  
 resource "azurerm_redis_cache" "demo01" {
