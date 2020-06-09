@@ -18,10 +18,10 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CL_PWD }}
       ARM_SUBSCRIPTION_ID: 874f6233-e9b0-4c57-a3bc-2365b7544f2a
       ARM_TENANT_ID: ${{ secrets.AZ_TENANT_MS }}
-      TF_VAR_redisRegions: '["eastus2"]'
+      TF_VAR_redisRegions: '["westeurope"]'
       TF_VAR_rgName: 'brewdis-prod'
-      TF_VAR_appName: 'brewdis-app-prod'
-      TF_VAR_svcName: 'brewdis-svc-prod'
+      TF_VAR_appName: 'brewdis-storefront'
+      TF_VAR_svcName: 'brewdis-spring-cloud'
       
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
