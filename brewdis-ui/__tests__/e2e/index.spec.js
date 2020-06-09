@@ -14,8 +14,8 @@ describe('brewdis tests', () => {
     await Promise.all([
       page.keyboard.press('Enter'),
       page.waitForSelector('mat-card-title'),
-      page.waitForLoadState('networkidle'),
     ]);
+    await page.waitForLoadState('networkidle');
     await page.screenshot({ path: '__tests__/artifacts/search.png' });
   });
 
