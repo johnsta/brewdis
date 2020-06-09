@@ -3,7 +3,7 @@ name: 'Provision_Azure_Infrastructure'
 on:
   push:
     branches:
-    - Azure
+    - azure
     paths:
       - 'infra/*'
   pull_request:
