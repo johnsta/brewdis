@@ -11,3 +11,6 @@
 .scripts/
 *.iml
 .idea/
+**/.terraform/
+*.tfstate
+brewdis-ui/__tests__/artifacts/**
