@@ -70,6 +70,9 @@ jobs:
           az spring-cloud app deployment create -n default \
             --app $SPRING_CLOUD_APP \
             --skip-clone-settings \
+            --memory 2 \
+            --runtime-version Java_11 \
+            --jvm-options='-Xms2048m -Xmx2048m'\
             --jar-path ${{ github.workspace }}/$BREWDIS_JAR
           az spring-cloud app set-deployment -d default -n $SPRING_CLOUD_APP
           
