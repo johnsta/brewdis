@@ -41,7 +41,7 @@ jobs:
     - name: Get Redis Secrets from Key Vault
       uses: Azure/get-keyvault-secrets@v1.0
       with:
-        keyvault: "petclinicdemokv"
+        keyvault: "brewrediskv"
         secrets: "SPRING-REDIS-HOST,SPRING-REDIS-PASSWORD"
       id: redissecrets
       
