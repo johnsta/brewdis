@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - Azure
-    paths:
-      - '.github/*'
+    #paths:
+    #  - '.github/*'
     #  - 'brewdis-api/*'
 
 jobs:
