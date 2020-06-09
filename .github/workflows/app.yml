@@ -17,6 +17,7 @@ jobs:
       RESOURCE_GROUP: brewdis-prod # customize this
       SPRING_CLOUD_SERVICE: brewdis-spring-cloud # customize this
       SPRING_CLOUD_APP: brewdis-storefront # customize this
+      BREWDIS_JAR: brewdis-api/build/libs/brewdis-api-1.0.0-SNAPSHOT.jar
 
     defaults:
       run:
@@ -66,7 +67,11 @@ jobs:
       run: |
           az configure --defaults group=$RESOURCE_GROUP
           az configure --defaults spring-cloud=$SPRING_CLOUD_SERVICE
-          az spring-cloud app show --name $SPRING_CLOUD_APP
+          az spring-cloud app deployment create -n default \
+            --app $SPRING_CLOUD_APP \
+            --skip-clone-settings \
+            --jar-path ${{ github.workspace }}/$BREWDIS_JAR
+          az spring-cloud app set-deployment -d default -n $SPRING_CLOUD_APP
           
     # Balan: Add steps here required to finish deployment of app
     # - name: Connect_App
