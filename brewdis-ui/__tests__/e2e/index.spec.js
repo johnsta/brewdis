@@ -1,7 +1,13 @@
 describe('brewdis tests', () => {
+  let page;
+
   beforeAll(async () => {
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({latitude: 34.0522, longitude: -118.2437}); // Los Angeles
+  });
+
+  beforeEach(async() => {
+    page = await context.newPage();
     await page.goto('https://brewredis-spring-storefront.azuremicroservices.io/');
   });
 
@@ -15,7 +21,9 @@ describe('brewdis tests', () => {
       page.keyboard.press('Enter'),
       page.waitForSelector('mat-card-title'),
     ]);
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => {
+      return [...document.querySelectorAll('mat-card img')].map(e => e.complete).every(Boolean);
+    });
     await page.screenshot({ path: '__tests__/artifacts/search.png' });
   });
 
