@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      RESOURCE_GROUP: brewdis-prod # customize this
-      SPRING_CLOUD_SERVICE: brewdis-spring-cloud # customize this
-      SPRING_CLOUD_APP: brewdis-storefront # customize this
+      RESOURCE_GROUP: brewdis # customize this
+      SPRING_CLOUD_SERVICE: brewdis-prod # customize this
+      SPRING_CLOUD_APP: storefront # customize this
       BREWDIS_JAR: brewdis-api/build/libs/brewdis-api-1.0.0-SNAPSHOT.jar
       SPRING_REDIS_PORT: 10000
       STOMP_PORT: 80
@@ -57,14 +57,11 @@ jobs:
    
     - name: Deploy with AZ CLI commands
       run: |
-          az spring-cloud app deploy \
-            -s $SPRING_CLOUD_SERVICE \
-            -g $RESOURCE_GROUP \
-            --name $SPRING_CLOUD_APP \
+          az spring-cloud app deployment create -n default \
+            --app $SPRING_CLOUD_APP \
+            --skip-clone-settings \
+            --memory 2 \
+            --runtime-version Java_11 \
             --jvm-options='-Xms2048m -Xmx2048m'\
-            --jar-path ${{ github.workspace }}/$BREWDIS_JAR \
-            --env SPRING_REDIS_HOST=${{ steps.keyvaultaction.outputs.SPRING-REDIS-HOST }} \
-              SPRING_REDIS_PASSWORD=${{ steps.keyvaultaction.outputs.SPRING-REDIS-PASSWORD }} \
-              SPRING_REDIS_PORT=$SPRING_REDIS_PORT \
-              STOMP_HOST=${SPRING_CLOUD_SERVICE}-${SPRING_CLOUD_APP}.azuremicroservices.io \
-              STOMP_PORT=$STOMP_PORT
+            --jar-path ${{ github.workspace }}/$BREWDIS_JAR
+          az spring-cloud app set-deployment -d default -n $SPRING_CLOUD_APP
