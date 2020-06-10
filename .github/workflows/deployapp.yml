@@ -57,6 +57,8 @@ jobs:
    
     - name: Deploy with AZ CLI commands
       run: |
+          az configure --defaults group=$RESOURCE_GROUP
+          az configure --defaults spring-cloud=$SPRING_CLOUD_SERVICE
           az spring-cloud app deployment create -n default \
             --app $SPRING_CLOUD_APP \
             --skip-clone-settings \
