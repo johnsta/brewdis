@@ -21,7 +21,7 @@ jobs:
       TF_VAR_redisRegions: '["westeurope"]'
       TF_VAR_rgName: 'brewredis-prod'
       TF_VAR_appName: 'storefront'
-      TF_VAR_svcName: 'brewredis-spring-cloud-prod'
+      TF_VAR_svcName: 'brewredis-prod'
       
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
