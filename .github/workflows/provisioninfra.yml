@@ -20,8 +20,8 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.AZ_TENANT_MS }}
       TF_VAR_redisRegions: '["westeurope"]'
       TF_VAR_rgName: 'brewdis-prod'
-      TF_VAR_appName: 'brewdis-storefront'
-      TF_VAR_svcName: 'brewdis-spring-cloud'
+      TF_VAR_appName: 'storefront'
+      TF_VAR_svcName: 'brewdis-prod'
       
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
