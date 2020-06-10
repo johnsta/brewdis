@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      RESOURCE_GROUP: brewdis # customize this
+      RESOURCE_GROUP: brewdis-prod # customize this
       SPRING_CLOUD_SERVICE: brewdis-prod # customize this
       SPRING_CLOUD_APP: storefront # customize this
       BREWDIS_JAR: brewdis-api/build/libs/brewdis-api-1.0.0-SNAPSHOT.jar
