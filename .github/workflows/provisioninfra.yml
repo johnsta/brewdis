@@ -4,8 +4,8 @@ on:
   push:
     branches:
     - azure
-    #paths:
-    #  - 'infra/*'
+    paths:
+      - 'infra/*'
   pull_request:
 
 jobs:
