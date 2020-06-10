@@ -1,4 +1,4 @@
-name: 'Provision_Azure_Infrastructure'
+name: 'Provision Azure Infrastructure'
 
 on:
   push:
