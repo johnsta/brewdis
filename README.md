@@ -43,6 +43,8 @@ Create an instance of Azure Cache for Redis Enterprise:
 | [Start here https://aka.ms/redis-enterprise which includes preview feature flag](https://aka.ms/redis-enterprise)
 |
 
+Important: Enable the 'redisearch' module from the Advanced tab during the creation process.
+
 ## Install the Azure CLI extension
 
 Install the Azure Spring Cloud extension for the Azure CLI using the following command
