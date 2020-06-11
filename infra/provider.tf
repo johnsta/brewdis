@@ -3,7 +3,7 @@ terraform {
     organization = "OSS-integrations"
 
     workspaces {
-      name = "java-demo-dev"
+      name = "java-demo"
     }
   }
 }
