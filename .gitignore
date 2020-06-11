@@ -15,3 +15,4 @@
 *.tfstate
 brewdis-ui/__tests__/artifacts/**
 infra/set-variables.sh
+infra/set-variables.sh
