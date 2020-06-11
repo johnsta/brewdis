@@ -102,13 +102,14 @@ jobs:
    
     - name: Deploy with AZ CLI commands
       run: |
-          az configure --defaults group=$RESOURCE_GROUP
-          az configure --defaults spring-cloud=$SPRING_CLOUD_SERVICE
-          az spring-cloud app deployment create -n default \
-            --app $SPRING_CLOUD_APP \
-            --skip-clone-settings \
-            --memory 2 \
-            --runtime-version Java_11 \
+          az spring-cloud app deploy \
+            -s $SPRING_CLOUD_SERVICE \
+            -g $RESOURCE_GROUP \
+            --name $SPRING_CLOUD_APP \
             --jvm-options='-Xms2048m -Xmx2048m'\
-            --jar-path ${{ github.workspace }}/$BREWDIS_JAR
-          az spring-cloud app set-deployment -d default -n $SPRING_CLOUD_APP
+            --jar-path ${{ github.workspace }}/$BREWDIS_JAR \
+            --env SPRING_REDIS_HOST=${{ steps.keyvaultaction.outputs.SPRING-REDIS-HOST }} \
+              SPRING_REDIS_PASSWORD=${{ steps.keyvaultaction.outputs.SPRING-REDIS-PASSWORD }} \
+              SPRING_REDIS_PORT=$SPRING_REDIS_PORT \
+              STOMP_HOST=${SPRING_CLOUD_SERVICE}-${SPRING_CLOUD_APP}.azuremicroservices.io \
+              STOMP_PORT=$STOMP_PORT
