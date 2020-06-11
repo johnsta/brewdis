@@ -176,5 +176,4 @@ public class InventoryManager
 		redis.opsForStream().trim(config.getInventory().getStream(),
 				config.getInventory().getCleanup().getStreamTrimCount());
 	}
-
 }
